@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id BigInt @id @db.UnsignedBigInt @default(autoincrement()) 
+  firstName String @db.VarChar(100) 
+  middleName  String @db.VarChar(100)
+  lastName  String @db.VarChar(100)
+  mobile String @unique @db.VarChar(100)
+  email String @unique @db.VarChar(100)
+  admin Boolean @db.TinyInt
+  registeredAt DateTime @db.Timestamp() @default(now()) 
+  lastLogin DateTime @db.Timestamp() @default(now())
+  createAt DateTime @db.Timestamp() @default(now())
+  updateAt DateTime @db.Timestamp() @default(now())
+  cart cart[]
+  order order[]
+  product product[]
+}
+
+model cart {
+  id BigInt @id @db.UnsignedBigInt @default(autoincrement())
+  userId BigInt @db.UnsignedBigInt
+  title String @db.VarChar(100)
+  sessionId String @db.VarChar(100)
+  token String @db.VarChar(100)
+  status String @db.VarChar(100)
+  firstName String @db.VarChar(100) 
+  middleName  String @db.VarChar(100)
+  lastName  String @db.VarChar(100)
+  mobile String @db.VarChar(100)
+  email String @db.VarChar(100)
+  city String @db.VarChar(100) 
+  country  String @db.VarChar(100)
+  createAt DateTime @db.Timestamp() @default(now())
+  updateAt DateTime @db.Timestamp() @default(now())
+  user user? @relation(fields: [userId], references: [id])  
+}
+
+model order {
+  id BigInt @id @db.UnsignedBigInt @default(autoincrement())
+  userId BigInt @db.UnsignedBigInt
+  title String @db.VarChar(100)
+  token String @db.VarChar(100)
+  subTotal Int @db.Int
+  itemDiscount Int @db.Int
+  tax Int @db.Int
+  total Int @db.Int
+  discount Int @db.Int
+  grandTotal Int @db.Int
+  firstName String @db.VarChar(100) 
+  middleName  String @db.VarChar(100)
+  lastName  String @db.VarChar(100)
+  mobile String @db.VarChar(100)
+  email String @db.VarChar(100)
+  city String @db.VarChar(100) 
+  country  String @db.VarChar(100)
+  createAt DateTime @db.Timestamp() @default(now())
+  updateAt DateTime @db.Timestamp() @default(now())
+  user user? @relation(fields: [userId], references: [id])  
+}
+
+model product {
+ id BigInt @id @db.UnsignedBigInt @default(autoincrement())
+ userId BigInt @db.UnsignedBigInt
+ firstName String @db.VarChar(100)
+ metaTitle String @db.VarChar(100)
+ slug String @db.VarChar(100)
+ summary String @db.VarChar(100)
+ price Int @db.Int
+ discount Int @db.Int
+ publishedAt DateTime @db.Timestamp() @default(now())
+ startsAt DateTime @db.Timestamp() @default(now())
+ endsAt DateTime @db.Timestamp() @default(now())
+ createAt DateTime @db.Timestamp() @default(now())
+ updateAt DateTime @db.Timestamp() @default(now())
+ user user? @relation(fields: [userId], references: [id])
+ product_meta product_meta[]
+ product_review product_review[]
+}
+
+model product_meta {
+ id BigInt @id @db.UnsignedBigInt @default(autoincrement())
+ productId BigInt @db.UnsignedBigInt
+ key String @db.VarChar(100)
+ content String @db.VarChar(100)
+ createAt DateTime @db.Timestamp() @default(now())
+ updateAt DateTime @db.Timestamp() @default(now())
+ product product? @relation(fields: [productId], references: [id])
+}
+
+model product_review {
+ id BigInt @id @db.UnsignedBigInt @default(autoincrement())
+ productId BigInt @db.UnsignedBigInt
+ title String @db.VarChar(100)
+ rating String @db.VarChar(100)
+ content String @db.VarChar(100)
+ createAt DateTime @db.Timestamp() @default(now())
+ updateAt DateTime @db.Timestamp() @default(now())
+ product product? @relation(fields: [productId], references: [id])
+}
+
+model category {
+ id BigInt @id @db.UnsignedBigInt @default(autoincrement())
+ title String @db.VarChar(100)
+ metaTitle String @db.VarChar(100)
+ slug String @db.VarChar(100)
+ content String @db.VarChar(100)
+ createAt DateTime @db.Timestamp() @default(now())
+ updateAt DateTime @db.Timestamp() @default(now())
+}
