@@ -9,28 +9,28 @@ export async function POST(req, res) {
 
     const prisma = new PrismaClient();
 
-    // create a record in product_review model
-    let result = await prisma.product_review.create({
+    // create a record in product_meta model
+    let result = await prisma.product_meta.create({
       data: reqBody,
     });
 
-    // read a record from product_review model
-    result = await prisma.product_review.findUnique({
+    // read a record from product_meta model
+    result = await prisma.product_meta.findUnique({
       where: {
         id: 99,
       },
     });
 
-    // update a record in product_review model
-    result = await prisma.product_review.update({
+    // update a record in product_meta model
+    result = await prisma.product_meta.update({
       where: {
         id: id,
       },
-      data: { rating: "Excellent!" },
+      data: { key: "target_group" },
     });
 
-    // delete a record from product_review model
-    result = await prisma.product_review.delete({
+    // delete a record from product_meta model
+    result = await prisma.product_meta.delete({
       where: {
         id: 99,
       },

@@ -9,6 +9,23 @@ export async function POST(req, res) {
 
     const prisma = new PrismaClient();
 
+    // Example of a transaction; if any one create operation fails,
+    // other one will also fail and rollback
+    const [product, product_meta] = await prisma.$transaction([
+      prisma.product.create({
+        data: reqBody,
+      }),
+      prisma.product_meta.create({
+        data: {
+          productId: reqBody.id,
+          key: `Meta: ${reqBody.metaTitle}`,
+          content: `Content: ${reqBody.summary}`,
+          createAt: new Date(),
+          updateAt: new Date(),
+        },
+      }),
+    ]);
+
     // create a record in product model
     let result = await prisma.product.create({
       data: reqBody,
@@ -35,6 +52,8 @@ export async function POST(req, res) {
         id: 99,
       },
     });
+
+    console.log(product, product_meta);
 
     return NextResponse.json({ status: "success", data: result });
   } catch (e) {
